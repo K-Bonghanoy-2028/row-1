@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Queue Management System </title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 20px;
+			}
+			input[type="text"] {
+				display: block;
+				margin-bottom: 10px;
+				padding: 8px;
+				width: 100%;
+				font-size: 16px;
+			}
+			button {
+				padding: 8px 16px;
+				background-color: #007BFF;
+				color: white;
+				border: none;
+				margin-right: 10px;
+				margin-top: 5px;
+			}	
+			p {
+				background-color: #f0f0f0;
+				padding: 8px;
+				margin-bottom: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<h2> Queue Management System </h2>
+		<h3> Join the Queue </h3>
+		<input type = "text" id = "name" placeholder = "Name">
+		<input type = "text" id = "purpose" placeholder = "Purpose">
+		<input type = "text" id = "idNum" placeholder = "ID Number">
+		<button onclick = "joinQueue()"> Join Queue </button> <hr>
+		<h3> Current Queue </h3>
+		<span id="queueList"> </span> <hr>
+		<h3> Admin Panel </h3>
+		<span id = "adminPanel"> </span>
+		<script>
+			var queue = [];
+			function joinQueue() {
+				var name = document.getElementById('name').value;
+				var purpose = document.getElementById('purpose').value;
+				var idNum = document.getElementById('idNum').value;
+				if (name !== "" && purpose !== "" && idNum !== "") {
+					queue.push({ name: name, purpose: purpose, idNum: idNum });
+					updateDisplay();
+				}
+				document.getElementById('name').value = "";
+				document.getElementById('purpose').value = "";
+				document.getElementById('idNum').value = "";
+			}
+			function updateDisplay() {
+				var queueList = document.getElementById('queueList');
+				var adminPanel = document.getElementById('adminPanel');
+				queueList.innerHTML = "";
+				adminPanel.innerHTML = "";
+				for (var i = 0; i < queue.length; i++) {
+					var person = queue[i];
+					queueList.innerHTML += "<p>" + (i + 1) + ". " + person.name + " - " + person.purpose + "</p>";
+					adminPanel.innerHTML += "<p>" + person.name + " (" + person.idNum + ") - " + person.purpose + "<br><button onclick='serve(" + i + ")'>Serve</button>" + "<button onclick='removePerson(" + i + ")'>Remove</button></p>";
+					}
+			}
+			function serve(index) {
+				queue.splice(index, 1);
+				updateDisplay();
+			}
+			function removePerson(index) {
+				queue.splice(index, 1);
+				updateDisplay();
+			}
+		</script>
+	</body>
+</html>
