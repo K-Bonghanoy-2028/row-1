@@ -16,12 +16,12 @@
 			}
 			button {
 				padding: 8px 16px;
-				background-color: #ffc2f0;
+				background-color: #007BFF;
 				color: white;
 				border: none;
 				margin-right: 10px;
 				margin-top: 5px;
-			}	
+			}
 			p {
 				background-color: #f0f0f0;
 				padding: 8px;
@@ -32,47 +32,67 @@
 	<body>
 		<h2> Queue Management System </h2>
 		<h3> Join the Queue </h3>
-		<input type = "text" id = "name" placeholder = "Name">
-		<input type = "text" id = "purpose" placeholder = "Purpose">
-		<input type = "text" id = "idNum" placeholder = "ID Number">
-		<button onclick = "joinQueue()"> Join Queue </button> <hr>
-		<h3> Current Queue </h3>
-		<span id="queueList"> </span> <hr>
-		<h3> Admin Panel </h3>
-		<span id = "adminPanel"> </span>
-		<script>
-			var queue = [];
-			function joinQueue() {
-				var name = document.getElementById('name').value;
-				var purpose = document.getElementById('purpose').value;
-				var idNum = document.getElementById('idNum').value;
-				if (name !== "" && purpose !== "" && idNum !== "") {
-					queue.push({ name: name, purpose: purpose, idNum: idNum });
-					updateDisplay();
-				}
-				document.getElementById('name').value = "";
-				document.getElementById('purpose').value = "";
-				document.getElementById('idNum').value = "";
-			}
-			function updateDisplay() {
-				var queueList = document.getElementById('queueList');
-				var adminPanel = document.getElementById('adminPanel');
-				queueList.innerHTML = "";
-				adminPanel.innerHTML = "";
-				for (var i = 0; i < queue.length; i++) {
-					var person = queue[i];
-					queueList.innerHTML += "<p>" + (i + 1) + ". " + person.name + " - " + person.purpose + "</p>";
-					adminPanel.innerHTML += "<p>" + person.name + " (" + person.idNum + ") - " + person.purpose + "<br><button onclick='serve(" + i + ")'>Serve</button>" + "<button onclick='removePerson(" + i + ")'>Remove</button></p>";
-					}
-			}
-			function serve(index) {
-				queue.splice(index, 1);
-				updateDisplay();
-			}
-			function removePerson(index) {
-				queue.splice(index, 1);
-				updateDisplay();
-			}
-		</script>
-	</body>
+		<input type="text" id="name" placeholder="Name">
+		<input type="text" id="purpose" placeholder="Purpose">
+		<input type="text" id="idNum" placeholder="ID Number">
+		<button onclick="joinQueue()">Join Queue</button> <hr>
+		<h3>Current Queue</h3>
+		<span id="queueList"></span> <hr>
+		<h3>Admin Panel</h3>
+		<span id="adminPanel"></span>
+
+<script>
+	var queue = [];
+
+	function joinQueue() {
+	var name = document.getElementById('name').value.trim();
+	var purpose = document.getElementById('purpose').value.trim();
+	var idNum = document.getElementById('idNum').value.trim();
+
+	if (name !== "" && purpose !== "" && idNum !== "") {
+	for (var i = 0; i < queue.length; i++) {
+	if (queue[i].idNum === idNum) {
+	alert("ID Number already in the queue. Please use a different ID.");
+	return;
+	}
+	}
+
+	queue.push({ name: name, purpose: purpose, idNum: idNum });
+	updateDisplay();
+	saveToLocalStorage();
+	}
+
+	document.getElementById('name').value = "";
+	document.getElementById('purpose').value = "";
+	document.getElementById('idNum').value = "";
+	}
+
+	function updateDisplay() {
+	var queueList = document.getElementById('queueList');
+	var adminPanel = document.getElementById('adminPanel');
+	queueList.innerHTML = "";
+	adminPanel.innerHTML = "";
+
+	for (var i = 0; i < queue.length; i++) {
+	var person = queue[i];
+	queueList.innerHTML += "<p>" + (i + 1) + ". " + person.name + " - " + person.purpose + "</p>";
+	adminPanel.innerHTML += "<p>" + person.name + " (" + person.idNum + ") - " + person.purpose +
+	"<br><button onclick='serve(" + i + ")'>Serve</button>" +
+	"<button onclick='removePerson(" + i + ")'>Remove</button></p>";
+	}
+	}
+
+	function serve(index) {
+	queue.splice(index, 1);
+	updateDisplay();
+	saveToLocalStorage();
+	}
+
+	function removePerson(index) {
+	queue.splice(index, 1);
+	updateDisplay();
+	saveToLocalStorage();
+	}
+</script>
+</body>
 </html>
